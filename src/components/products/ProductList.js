@@ -6,7 +6,6 @@ import AuthContext from "../../context/productContext";
 
 import {
   Button,
-  Container,
   Modal,
   ModalHeader,
   ModalBody,
@@ -21,6 +20,7 @@ const ProductList = () => {
       title: "ID",
       dataIndex: "productId",
       responsive: ["md"],
+      
       sorter: (record1, record2) => {
         return record1.productId - record2.productId;
       },
@@ -91,6 +91,12 @@ const ProductList = () => {
     },
     {
       key: "10",
+      title: "Imagen",
+      dataIndex: "image",
+      responsive: ["md"]
+    },
+    {
+      key: "11",
       title: "Acciones",
       dataIndex: "action",
       responsive: ["md"],
@@ -140,6 +146,7 @@ const ProductList = () => {
     sales: "",
     image: "",
   });
+  const [files, setFile]=useState(null);
   const {
     productId,
     productName,
@@ -192,8 +199,9 @@ const ProductList = () => {
       price: "",
       available: "",
       sales: "",
-      image: "",
+      image: null,
     });
+    setFile(null);
 
     setModal(false);
     setCase("New");
@@ -206,9 +214,12 @@ const ProductList = () => {
   };
 
   const deleteRecord = (record) => {
-    deleteProductFromList(record.productId);
+    deleteProductFromList(record._id);
   };
 
+  const handleChangeImage = e => {
+    setFile(e.target.files[0])
+  }
   return (
     <Fragment>
       <div className="contenedor-principal">
@@ -225,6 +236,7 @@ const ProductList = () => {
           columns={columns}
           key={dataSource.productId}
           dataSource={dataSource}
+          rowKey='_id'
           scroll={{ x: 1500 }}
           total={10}
           pagination={{
@@ -357,9 +369,8 @@ const ProductList = () => {
             <label htmlFor="image">Imagen</label>
             <input
               type="file"
-              id="image"
-              name="image"
               className="form-control"
+              name="image"
               value={image}
               onChange={handleChange}
             ></input>

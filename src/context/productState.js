@@ -16,75 +16,22 @@ import {
 const ProductState = (props) => {
   const initialState = {
     usuario: null,
-    products: []
-    // countries: [],
-    // products: [
-    //   {
-    //     productId: 1,
-    //     productName: "Televisor",
-    //     characteristics: "Plasma 64",
-    //     dateLaunch: "2021-10-08",
-    //     email: "sony@gmail.com",
-    //     country: "Colombia",
-    //     price: 6400,
-    //     available: 8,
-    //     sales: 10,
-    //   },
-    //   {
-    //     productId: 2,
-    //     productName: "Portatil",
-    //     characteristics: "Tactil",
-    //     dateLaunch: "2021-10-05",
-    //     email: "assus@gmail.com",
-    //     country: "Colombia",
-    //     price: 1500,
-    //     available: 20,
-    //     sales: 30,
-    //   },
-    //   {
-    //     productId: 3,
-    //     productName: "Cafetera",
-    //     characteristics: "Imusa",
-    //     dateLaunch: "2021-10-04",
-    //     email: "imusa@gmail.com",
-    //     country: "Colombia",
-    //     price: 3000,
-    //     available: 5,
-    //     sales: 30,
-    //   },
-    //   {
-    //     productId: 4,
-    //     productName: "Celular",
-    //     characteristics: "Iphone",
-    //     dateLaunch: "2021-10-01",
-    //     email: "apple@gmail.com",
-    //     country: "Colombia",
-    //     price: 5000,
-    //     available: 35,
-    //     sales: 30,
-    //   },
-    //   {
-    //     productId: 5,
-    //     productName: "Horno",
-    //     characteristics: "Cocion",
-    //     dateLaunch: "2021-10-08",
-    //     email: "imusa@gmail.com",
-    //     country: "Colombia",
-    //     price: 9000,
-    //     available: 20,
-    //     sales: 30,
-    //   },
-    // ],
+    products: [],
   };
 
   const [state, dispatch] = useReducer(ProductReducer, initialState);
 
   const saveProductsList = async (product) => {
-    const response = await clienteAxios.post("/api/products", product);
-    dispatch({
-      type: SAVE_PRODUCT,
-      payload: response.data,
-    });
+    try {
+      const response = await clienteAxios.post("/api/products", product);
+
+      dispatch({
+        type: SAVE_PRODUCT,
+        payload: response.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const iniciarSesion = async (datos) => {
@@ -101,10 +48,10 @@ const ProductState = (props) => {
   };
 
   const deleteProductFromList = async (productId) => {
-    const result = clienteAxios.delete(`/api/products/${productId}`);
+    const result = await clienteAxios.delete(`/api/products/${productId}`);
     dispatch({
       type: DELETE_PRODUCT,
-      payload: result.data.product.productId,
+      payload: result.data.product.productId
     });
   };
 
@@ -121,7 +68,6 @@ const ProductState = (props) => {
 
   const getAllProducts = async () => {
     const result = await clienteAxios.get("/api/products");
-    console.log(result);
     dispatch({
       type: GET_ALL_PRODUCTS,
       payload: result.data.products,
