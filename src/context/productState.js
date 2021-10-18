@@ -21,10 +21,10 @@ const ProductState = (props) => {
 
   const [state, dispatch] = useReducer(ProductReducer, initialState);
 
-  const saveProductsList = async (product) => {
+  const saveProductsList = async (product, file) => {
     try {
       const response = await clienteAxios.post("/api/products", product);
-
+      saveImage(response.data._id, file);
       dispatch({
         type: SAVE_PRODUCT,
         payload: response.data,
@@ -32,6 +32,15 @@ const ProductState = (props) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const saveImage = async (productId, file) => {
+    const formData = new FormData();
+    formData.append("image", file, "form-data");
+    const response = await clienteAxios.post(
+      `/api/products/upload-image/${productId}`,
+      formData
+    );
   };
 
   const iniciarSesion = async (datos) => {
@@ -51,7 +60,7 @@ const ProductState = (props) => {
     const result = await clienteAxios.delete(`/api/products/${productId}`);
     dispatch({
       type: DELETE_PRODUCT,
-      payload: result.data.product.productId
+      payload: result.data.product.productId,
     });
   };
 

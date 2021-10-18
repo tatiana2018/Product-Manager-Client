@@ -94,6 +94,14 @@ const ProductList = () => {
       title: "Imagen",
       dataIndex: "image",
       responsive: ["md"]
+      ,
+      render: (text, record) => (
+        <Space size="middle">
+            <div >
+              <img classname="size-image" src={`http://localhost:7008/api/products/get-image/${record?.image}`} />     
+            </div>
+        </Space>
+      ),
     },
     {
       key: "11",
@@ -146,7 +154,8 @@ const ProductList = () => {
     sales: "",
     image: "",
   });
-  const [files, setFile]=useState(null);
+  const [files, setFile]= useState();
+  const [pathImage, setPathImage]= useState('');
   const {
     productId,
     productName,
@@ -183,7 +192,8 @@ const ProductList = () => {
 
   const saveProduct = () => {
     if (casos === "New") {
-      saveProductsList(product);
+      console.log("desde el save product"+[files])
+      saveProductsList(product, files);
     }
     if (casos === "Update") {
       updateProductFromList(product);
@@ -218,7 +228,20 @@ const ProductList = () => {
   };
 
   const handleChangeImage = e => {
-    setFile(e.target.files[0])
+    if(e.target && e.target.files.length > 0){
+      const file = e.target.files[0]
+      if(file.type.includes('image')){
+        const reader = new FileReader();
+        reader.readAsDataURL(file)
+        reader.onload = function load(){
+          setPathImage(reader.result)
+        }
+        setFile(file);
+      }
+      else{
+        console.log('hubo un error con la imagen');
+      }
+    }
   }
   return (
     <Fragment>
@@ -370,9 +393,7 @@ const ProductList = () => {
             <input
               type="file"
               className="form-control"
-              name="image"
-              value={image}
-              onChange={handleChange}
+              onChange={handleChangeImage}
             ></input>
           </FormGroup>
         </ModalBody>
