@@ -87,11 +87,9 @@ const ProductList = () => {
       key: "9",
       title: "Unidades vendidas",
       dataIndex: "sales",
-      responsive: ["md"],
-
       filters: [{ text: "Mas de 20", value: false }],
       onFilter: (value, record2) => {
-        return record2.available > 20;
+        return record2.sales > 20;
       },
     },
     {
