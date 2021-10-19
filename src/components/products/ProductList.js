@@ -20,9 +20,8 @@ const ProductList = () => {
       title: "ID",
       dataIndex: "productId",
       responsive: ["md"],
-      
       sorter: (record1, record2) => {
-        return record1.productId - record2.productId;
+        return record1.productId < record2.productId;
       },
     },
     {
@@ -63,7 +62,7 @@ const ProductList = () => {
       dataIndex: "price",
       responsive: ["md"],
       sorter: (record1, record2) => {
-        return record1.price - record2.price;
+        return record1.price > record2.price;
       },
       render: (text, record) => (
         <Space size="middle">
