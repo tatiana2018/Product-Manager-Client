@@ -62,10 +62,15 @@ const ProductList = () => {
       title: "Precio",
       dataIndex: "price",
       responsive: ["md"],
-
       sorter: (record1, record2) => {
         return record1.price - record2.price;
       },
+      render: (text, record) => (
+        <Space size="middle">
+            {formatNumber(record?.price)}        
+        </Space>
+      ),
+    
     },
 
     {
@@ -93,8 +98,7 @@ const ProductList = () => {
       key: "10",
       title: "Imagen",
       dataIndex: "image",
-      responsive: ["md"]
-      ,
+      responsive: ["md"],
       render: (text, record) => (
         <Space size="middle">
             <div >
@@ -192,7 +196,6 @@ const ProductList = () => {
 
   const saveProduct = () => {
     if (casos === "New") {
-      console.log("desde el save product"+[files])
       saveProductsList(product, files);
     }
     if (casos === "Update") {
@@ -216,6 +219,15 @@ const ProductList = () => {
     setModal(false);
     setCase("New");
   };
+
+  
+
+  const formatNumber = (number)=>{
+    return new Intl.NumberFormat("en-IN", {
+      style: 'currency',
+      currency: 'USD'
+    }).format(number);
+  }
 
   const selectedProduct = (product, caso) => {
     setProduct(product);
@@ -243,6 +255,7 @@ const ProductList = () => {
       }
     }
   }
+
   return (
     <Fragment>
       <div className="contenedor-principal">
