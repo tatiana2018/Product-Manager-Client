@@ -3,6 +3,7 @@ import { Table, Space } from "antd";
 import "antd/dist/antd.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthContext from "../../context/productContext";
+import CurrencyInput from "react-currency-input-field";
 
 import {
   Button,
@@ -65,11 +66,8 @@ const ProductList = () => {
         return record1.price > record2.price;
       },
       render: (text, record) => (
-        <Space size="middle">
-            {formatNumber(record?.price)}        
-        </Space>
+        <Space size="middle">{formatNumber(record?.price)}</Space>
       ),
-    
     },
 
     {
@@ -98,9 +96,12 @@ const ProductList = () => {
       responsive: ["md"],
       render: (text, record) => (
         <Space size="middle">
-            <div >
-              <img classname="size-image" src={`http://localhost:7008/api/products/get-image/${record?.image}`} />     
-            </div>
+          <div>
+            <img
+              classname="size-image"
+              src={`http://localhost:7008/api/products/get-image/${record?.image}`}
+            />
+          </div>
         </Space>
       ),
     },
@@ -155,8 +156,8 @@ const ProductList = () => {
     sales: "",
     image: "",
   });
-  const [files, setFile]= useState();
-  const [pathImage, setPathImage]= useState('');
+  const [files, setFile] = useState();
+  const [pathImage, setPathImage] = useState("");
   const {
     productId,
     productName,
@@ -196,7 +197,7 @@ const ProductList = () => {
       saveProductsList(product, files);
     }
     if (casos === "Update") {
-      updateProductFromList(product);
+      updateProductFromList(product, files);
     }
 
     setProduct({
@@ -217,14 +218,12 @@ const ProductList = () => {
     setCase("New");
   };
 
-  
-
-  const formatNumber = (number)=>{
+  const formatNumber = (number) => {
     return new Intl.NumberFormat("en-IN", {
-      style: 'currency',
-      currency: 'USD'
+      style: "currency",
+      currency: "USD",
     }).format(number);
-  }
+  };
 
   const selectedProduct = (product, caso) => {
     setProduct(product);
@@ -236,22 +235,21 @@ const ProductList = () => {
     deleteProductFromList(record._id);
   };
 
-  const handleChangeImage = e => {
-    if(e.target && e.target.files.length > 0){
-      const file = e.target.files[0]
-      if(file.type.includes('image')){
+  const handleChangeImage = (e) => {
+    if (e.target && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file.type.includes("image")) {
         const reader = new FileReader();
-        reader.readAsDataURL(file)
-        reader.onload = function load(){
-          setPathImage(reader.result)
-        }
+        reader.readAsDataURL(file);
+        reader.onload = function load() {
+          setPathImage(reader.result);
+        };
         setFile(file);
-      }
-      else{
-        console.log('hubo un error con la imagen');
+      } else {
+        console.log("hubo un error con la imagen");
       }
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -269,7 +267,7 @@ const ProductList = () => {
           columns={columns}
           key={dataSource.productId}
           dataSource={dataSource}
-          rowKey='_id'
+          rowKey="_id"
           scroll={{ x: 1500 }}
           total={10}
           pagination={{
@@ -367,14 +365,14 @@ const ProductList = () => {
 
           <FormGroup>
             <label htmlFor="price">Precio</label>
-            <input
-              type="text"
-              id="price"
-              name="price"
-              className="form-control"
+            <CurrencyInput
+              defaultValue={1000}
+              decimalsLimit={2}
               value={price}
+              className="form-control"
+              name="price"
               onChange={handleChange}
-            ></input>
+            />
           </FormGroup>
           <FormGroup>
             <label htmlFor="available">Unidades disponibles</label>

@@ -17,7 +17,6 @@ function App() {
           <RutaPrivada exact path="/main" component={Main} />
           <RutaPrivada exact path="/perfil" component={Profile} />
           <RutaPrivada exact path="/products" component={Products} />
-
         </Switch>
       </Router>
     </ProductState>

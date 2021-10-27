@@ -64,11 +64,12 @@ const ProductState = (props) => {
     });
   };
 
-  const updateProductFromList = async (product) => {
+  const updateProductFromList = async (product, file) => {
     const result = await clienteAxios.put(
       `/api/products/${product._id}`,
       product
     );
+    saveImage(product._id, file);
     dispatch({
       type: UPDATE_PRODUCT,
       payload: result.data.product,
